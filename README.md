@@ -1,63 +1,39 @@
 # Jieli
 
-Jieli stores, searches, shares and exports AI coding conversations for humans and
-agents. Supported plugins sync conversations directly with Jieli.
-Previously stored Amp conversations remain readable; the Amp runtime, model relay
-and model configuration are no longer offered.
+简体中文 · [English](README.en.md)
 
-## Run your own instance
+保存、搜索、分享和导出 AI 编程对话。支持 Claude Code、Codex，其他 Agent 待支持。
 
-Build the frontend and Go server:
+## Docker 部署
 
-```sh
-npm --prefix frontend ci
-npm --prefix frontend run build
-go build -o jieli ./cmd/server
-```
-
-Configure foundational environment variables using `.env.example`, including a
-private `SESSION_SECRET`, `SQLITE_PATH` and a random `JIELI_SETUP_TOKEN`. Set
-the public site URL, SMTP and registration in Site Administration → Site
-Configuration.
-The server reads the process environment; it does not automatically load `.env`.
-Start `./jieli`, then initialize an administrator at `/web/auth/signin`.
-
-Self-hosted users have unlimited sync messages. Email registration is closed by
-default; an administrator may create accounts directly, or configure and test
-SMTP before explicitly opening registration. OAuth providers are optional.
-
-## Back up and upgrade
-
-Before upgrading, back up the SQLite database with its online backup command
-(`sqlite3 data/jieli.db '.backup /safe/path/jieli.db'`) and copy the attachment
-storage directory. Keep the old binary and its environment configuration.
-Do not copy only the live database file while SQLite is in WAL mode.
-
-Build the new version, stop the old process and start the new binary with the
-same database, attachment paths and session secret. Supported schema upgrades
-preserve accounts, conversations and membership history. Very old schemas with
-required `threads.data_json` are rejected; back up and migrate them explicitly.
-Configure the site URL and SMTP in Site Administration after upgrading from an
-older environment-based mail configuration.
-
-To restore, stop Jieli, retain the failed database and its WAL files in a separate
-location, restore the backup database and matching attachments, then start the
-matching old binary. Verify login, historical conversations and image downloads.
-
-## Editions and plugins
-
-The public edition builds without commercial source or dependencies. The hosted build and its billing implementation are maintained separately
-in the private branch.
-
-Install conversation upload plugins from [jieliapp/plugins](https://github.com/jieliapp/plugins).
-The public API supports Claude Code, Codex, OpenCode and Pi uploads. Previously
-stored Amp conversations remain readable; new Amp uploads are rejected.
-
-## Verify
+安装 Docker 和 Docker Compose，首次部署执行：
 
 ```sh
-go test ./...
-npm --prefix frontend run check
-npm --prefix frontend test
-npm --prefix frontend run build
+git clone https://github.com/jieliapp/Jieli.git
+cd Jieli
+docker compose up -d --build
 ```
+
+打开 [http://localhost:8080](http://localhost:8080)，进入登录页，填写邮箱、密码和确认密码，即可创建管理员并自动登录，无需验证邮件。
+请先完成管理员创建，再将站点开放给其他人。
+
+管理员可直接创建用户，或在管理后台配置并测试 SMTP，再开启邮箱注册。
+自托管版不限同步消息数量；站点地址和邮件设置均在管理后台配置。
+
+数据库、附件和自动生成的 `.env` 都保存在 Docker 数据卷 `/app/data` 中，升级前请做好备份。不要执行 `docker compose down -v`，这会删除数据。
+
+## 非 Docker 部署
+
+适用于 Linux/macOS，脚本会检查所需依赖并提示缺失项。
+
+```sh
+git clone https://github.com/jieliapp/Jieli.git
+cd Jieli
+./scripts/run.sh
+```
+
+脚本自动构建并启动服务，访问 [http://localhost:8080](http://localhost:8080)。数据库、附件和自动生成的 `.env` 保存在 `data/`，升级前请备份此目录。服务在前台运行，按 `Ctrl+C` 停止；更新代码后再次运行同一脚本即可。
+
+## 对话同步
+
+安装 Agent 对应的 [Jieli 插件](https://github.com/jieliapp/plugins)，将对话同步到自己的实例。

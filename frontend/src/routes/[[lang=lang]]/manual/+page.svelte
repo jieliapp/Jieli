@@ -35,7 +35,7 @@
             {
               t: 'list',
               items: [
-                '多来源:Claude Code、Codex 统一汇聚在一个地方。',
+                '多来源:支持 Claude Code、Codex，其他 Agent 待支持。',
                 '可搜索:把散落在各处的对话变成可全文检索的工程记忆。',
                 '可分享:一键生成只读链接,把某次排障过程分享给同事。',
                 '可接力:换工具、换会话时,带着完整上下文无缝继续。'
@@ -190,7 +190,7 @@
             {
               t: 'list',
               items: [
-                'Multi-provider: Claude Code and Codex gathered in one place.',
+                'Multi-provider: Claude Code and Codex gathered in one place, with support for other agents planned.',
                 'Searchable: turn scattered conversations into full-text engineering memory.',
                 'Shareable: generate a read-only link to share a debugging session with a teammate.',
                 'Hand-off ready: continue with full context across sessions and tools.'
