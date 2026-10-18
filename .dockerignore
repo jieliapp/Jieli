@@ -1,0 +1,14 @@
+.git
+.env*
+**/.env*
+**/node_modules
+**/.svelte-kit
+frontend/dist
+data
+docs
+references
+logs
+output
+tmp
+.DS_Store
+AGENTS.md

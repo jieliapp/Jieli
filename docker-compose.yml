@@ -1,0 +1,11 @@
+services:
+  jieli:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "${JIELI_PORT:-8080}:8080"
+    volumes:
+      - jieli_data:/app/data
+
+volumes:
+  jieli_data:
