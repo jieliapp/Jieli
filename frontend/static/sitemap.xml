@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://jieli.app/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jieli.app/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://jieli.app/zh" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jieli.app/" />
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://jieli.app/zh</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jieli.app/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://jieli.app/zh" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jieli.app/" />
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://jieli.app/pricing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jieli.app/pricing" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://jieli.app/zh/pricing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jieli.app/pricing" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jieli.app/zh/pricing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jieli.app/pricing" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://jieli.app/zh/pricing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jieli.app/pricing" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jieli.app/manual</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jieli.app/manual" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://jieli.app/zh/manual" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jieli.app/manual" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jieli.app/zh/manual</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jieli.app/manual" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://jieli.app/zh/manual" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jieli.app/manual" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jieli.app/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://jieli.app/terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>

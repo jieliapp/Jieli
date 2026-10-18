@@ -1,0 +1,120 @@
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMonoNerdFont-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMonoNerdFont-Medium.ttf") format("truetype");
+  font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMonoNerdFont-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Color tokens — light-theme first.
+     Palette uses neutral white app backgrounds, flat white surfaces,
+     black text, fine grey borders, and restrained blue-grey accents. */
+
+  --color-bg: #f4f3ef;
+  --color-bg-elevated: #ffffff;
+  --color-bg-inset: #ecebe7;
+  --color-bg-hover: #efeee9;
+
+  --color-border: #e7e7e7;
+  --color-border-strong: #d3d3d3;
+
+  --color-text: #111111;
+  --color-text-muted: #666666;
+  --color-text-subtle: #8a8a8a;
+
+  /* Primary button: black surface, white text */
+  --color-primary: #111111;
+  --color-primary-hover: #2a2a2a;
+  --color-primary-contrast: #ffffff;
+
+  /* Secondary solid surface */
+  --color-secondary: #ffffff;
+  --color-secondary-hover: #f3f3f3;
+
+  /* Muted blue-grey, used sparingly: links, active states, focus */
+  --color-accent: #6b8ead;
+  --color-accent-hover: #5b7f9f;
+  --color-accent-contrast: #ffffff;
+
+  --color-link: #466f95;
+
+  --color-success: #248232;
+  --color-danger: #b04b3d;
+  --color-warning: #a67c52;
+
+  /* Stat colors (profile) */
+  --color-added: #248232;
+  --color-removed: #b04b3d;
+  --color-changed: #a67c52;
+
+  /* Activity heatmap */
+  --color-heatmap-empty: #fbfaf6;
+  --color-heatmap-1: #ffc7bd;
+  --color-heatmap-2: #ff9a85;
+  --color-heatmap-3: #ff755d;
+  --color-heatmap-4: #ff5a45;
+
+  /* Typography */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Mono", "Cascadia Code", "SF Mono",
+    Menlo, "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", Consolas,
+    "Liberation Mono", monospace;
+  --font-code: "JetBrains Mono", "Cascadia Mono", "Cascadia Code", "SF Mono",
+    Menlo, "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", Consolas,
+    "Liberation Mono", monospace;
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+    Cambria, "Times New Roman", serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.875rem;
+  --text-3xl: 2.75rem;
+  --text-4xl: 3.75rem;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+  --space-10: 4rem;
+  --space-12: 6rem;
+
+  /* Radii — base 0.5rem with derived steps */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.06);
+  --shadow-md: 0 8px 28px rgba(17, 17, 17, 0.08);
+
+  /* Layout */
+  --layout-max-width: 1120px;
+  --topbar-height: 56px;
+}

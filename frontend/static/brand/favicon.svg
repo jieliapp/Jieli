@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Jieli mark">
+  <defs>
+    <radialGradient id="mark-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffd21a" stop-opacity="0.34" />
+      <stop offset="52%" stop-color="#ffd21a" stop-opacity="0.14" />
+      <stop offset="82%" stop-color="#ffd21a" stop-opacity="0.04" />
+      <stop offset="100%" stop-color="#ffd21a" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="mark-fill" cx="36%" cy="30%" r="76%">
+      <stop offset="0%" stop-color="#ffe45c" />
+      <stop offset="58%" stop-color="#ffd21a" />
+      <stop offset="100%" stop-color="#ffc400" />
+    </radialGradient>
+  </defs>
+
+  <circle cx="256" cy="256" r="222" fill="url(#mark-glow)" />
+  <circle cx="256" cy="256" r="154" fill="url(#mark-fill)" />
+</svg>

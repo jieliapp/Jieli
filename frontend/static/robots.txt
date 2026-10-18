@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /$
+Allow: /zh
+Allow: /pricing
+Allow: /zh/pricing
+Allow: /manual
+Allow: /zh/manual
+Allow: /privacy
+Allow: /terms
+Disallow: /threads/
+Disallow: /web/
+Disallow: /api/
+
+Sitemap: https://jieli.app/sitemap.xml
