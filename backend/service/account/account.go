@@ -26,6 +26,8 @@ type Input struct {
 // accountCreation serializes email claims and initial administrator setup.
 var accountCreation sync.Mutex
 
+var ErrAlreadyInitialized = errors.New("administrator already initialized")
+
 func Email(raw string) (string, error) {
 	email := strings.ToLower(strings.TrimSpace(raw))
 	address, err := mail.ParseAddress(email)
@@ -66,7 +68,22 @@ func (s Service) Create(ctx context.Context, input Input, admin, temporary bool)
 	err = thing.Transaction(ctx, func(tx *thing.TxSession) error {
 		var err error
 		user, err = s.newEmailAccount(tx, email, hash, "", admin, temporary)
-		return err
+		if err != nil || !admin {
+			return err
+		}
+		settings, err := thing.UseTx[*model.SiteSettings](tx)
+		if err != nil {
+			return err
+		}
+		rows, err := settings.Where("name = ?", model.SiteSettingRegistrationEnabled).Fetch(0, 1)
+		if err != nil {
+			return err
+		}
+		registration := &model.SiteSettings{Name: model.SiteSettingRegistrationEnabled, Value: "false", ValueType: "bool"}
+		if len(rows) != 0 {
+			registration.ID = rows[0].ID
+		}
+		return settings.Save(registration)
 	})
 	return user, err
 }
@@ -77,12 +94,12 @@ func (s Service) newEmailAccount(tx *thing.TxSession, email, hash, displayName s
 		return nil, err
 	}
 	if admin {
-		count, err := users.Where("is_admin = ?", true).Count()
+		count, err := users.Where("is_admin = ?", true).WithDeleted().Count()
 		if err != nil {
 			return nil, err
 		}
 		if count != 0 {
-			return nil, errors.New("administrator already initialized")
+			return nil, ErrAlreadyInitialized
 		}
 	}
 	count, err := users.Where("email = ? OR login_email = ?", email, email).WithDeleted().Count()

@@ -27,12 +27,12 @@ func registerEmailRoutes(auth, admin *gin.RouterGroup, cfg Config) {
 			fail(c, 500, "email settings unavailable")
 			return
 		}
-		count, err := model.UserDB.Where("is_admin = ?", true).Count()
+		count, err := model.UserDB.Where("is_admin = ?", true).WithDeleted().Count()
 		if err != nil {
 			fail(c, 500, "account settings unavailable")
 			return
 		}
-		common.OK(c, gin.H{"registration_enabled": settings.RegistrationEnabled, "recovery_enabled": settings.Tested && settings.PublicBaseURL != "", "setup_available": count == 0 && cfg.SetupToken != ""})
+		common.OK(c, gin.H{"registration_enabled": settings.RegistrationEnabled, "recovery_enabled": settings.Tested && settings.PublicBaseURL != "", "setup_available": count == 0 && (cfg.SelfHosted || cfg.SetupToken != ""), "setup_requires_token": !cfg.SelfHosted})
 	})
 
 	getSiteSettings := func(c *gin.Context) {

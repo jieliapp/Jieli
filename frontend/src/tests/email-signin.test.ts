@@ -14,7 +14,7 @@ beforeEach(() => {
  locale.set('en');
  mocks.get.mockReset(); mocks.post.mockReset();
  mocks.get.mockImplementation(async (path: string) => path === '/auth/options'
- ? { registration_enabled: true, recovery_enabled: true, setup_available: true }
+ ? { registration_enabled: true, recovery_enabled: true, setup_available: false }
  : { dev_mode: false, github_oauth: true, google_oauth: false });
 });
 afterEach(async () => { if (component) await unmount(component); document.body.innerHTML = ''; });
@@ -96,14 +96,39 @@ it('honors registration, recovery, setup and provider availability', async () =>
  expect(button('Reset password')).toBeUndefined();
 });
 
-it('keeps administrator setup separate and submits the operator token', async () => {
- await open(); button('Initialize administrator').click();
- await vi.waitFor(() => expect(document.querySelector('h1')?.textContent).toBe('Create your administrator'));
- fill('input[type="email"]', 'owner@example.com'); submit();
- await vi.waitFor(() => expect(document.querySelector('#setup-token')).not.toBeNull());
- fill('input[autocomplete="new-password"]', 'owner-password-value'); fill('#setup-token', 'operator-token');
+it.each([['zh', '创建管理员', '两次输入的密码不一致。'], ['en', 'Create administrator', 'Passwords do not match.']] as const)('opens the first-install form directly and requires matching passwords in %s', async (language, label, mismatch) => {
+ locale.set(language);
+ mocks.get.mockImplementation(async (path: string) => path === '/auth/options'
+ ? { registration_enabled: false, recovery_enabled: false, setup_available: true, setup_requires_token: false }
+ : { dev_mode: false, github_oauth: true, google_oauth: false });
+ await open(label);
+ expect(document.querySelector('#setup-token')).toBeNull();
+ expect(document.querySelector('a[href="/web/api/auth/github"]')).toBeNull();
+ expect(button('Sign up')).toBeUndefined();
+ fill('#auth-email', 'owner@example.com');
+ fill('#auth-password', 'owner-password-value');
+ fill('#auth-password-confirm', 'different-password'); submit();
+ await vi.waitFor(() => expect(document.querySelector('[role="alert"]')?.textContent).toBe(mismatch));
+ expect(mocks.post).not.toHaveBeenCalled();
+ fill('#auth-password-confirm', 'owner-password-value');
+ mocks.post.mockRejectedValueOnce(new Error('Administrator already initialized')); submit();
+ await vi.waitFor(() => expect(mocks.post).toHaveBeenCalledWith('/auth/setup', { email: 'owner@example.com', password: 'owner-password-value', password_confirm: 'owner-password-value' }));
+ await vi.waitFor(() => expect(document.querySelector('[role="alert"]')?.textContent).toContain('Administrator already initialized'));
+ expect(document.querySelector('[role="status"]')).toBeNull();
+ expect(document.querySelector<HTMLInputElement>('#auth-email')!.readOnly).toBe(false);
+});
+
+it('includes the operator token when the server requires protected setup', async () => {
+ mocks.get.mockImplementation(async (path: string) => path === '/auth/options'
+ ? { registration_enabled: false, recovery_enabled: false, setup_available: true, setup_requires_token: true }
+ : { dev_mode: false, github_oauth: false, google_oauth: false });
+ await open('Create administrator');
+ fill('#auth-email', 'owner@example.com');
+ fill('#auth-password', 'owner-password-value');
+ fill('#auth-password-confirm', 'owner-password-value');
+ fill('#setup-token', 'operator-token');
  mocks.post.mockRejectedValueOnce(new Error('Setup unavailable')); submit();
- await vi.waitFor(() => expect(mocks.post).toHaveBeenCalledWith('/auth/setup', { email: 'owner@example.com', password: 'owner-password-value', token: 'operator-token' }));
+ await vi.waitFor(() => expect(mocks.post).toHaveBeenCalledWith('/auth/setup', { email: 'owner@example.com', password: 'owner-password-value', password_confirm: 'owner-password-value', token: 'operator-token' }));
  await vi.waitFor(() => expect(document.querySelector('[role="alert"]')?.textContent).toContain('Setup unavailable'));
 });
 

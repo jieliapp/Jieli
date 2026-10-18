@@ -11,6 +11,7 @@
   let email = $state('');
   let displayName = $state('');
   let password = $state('');
+  let passwordConfirm = $state('');
   let setupToken = $state('');
   let showPassword = $state(false);
   let busy = $state(false);
@@ -20,7 +21,7 @@
   let oauthError = $state('');
   let emailInput: HTMLInputElement | undefined = $state();
   let passwordInput: HTMLInputElement | undefined = $state();
-  let options = $state({ registration_enabled: false, recovery_enabled: false, setup_available: false });
+  let options = $state({ registration_enabled: false, recovery_enabled: false, setup_available: false, setup_requires_token: false });
   let config = $state({ dev_mode: false, github_oauth: false, google_oauth: false });
   const text = (zh: string, en: string) => $locale === 'zh' ? zh : en;
   const title = $derived(step === 'sent' ? text('请查看邮箱', 'Check your email')
@@ -38,6 +39,7 @@
       ]);
       options = authOptions;
       config = serverConfig;
+      if (options.setup_available) mode = 'setup';
     } catch {
       configError = true;
     } finally {
@@ -50,6 +52,7 @@
     mode = next;
     step = 'details';
     password = '';
+    passwordConfirm = '';
     setupToken = '';
     showPassword = false;
     error = '';
@@ -74,7 +77,7 @@
     error = '';
     oauthError = '';
     email = email.trim();
-    if (step === 'details' && mode !== 'reset') {
+    if (step === 'details' && mode !== 'reset' && mode !== 'setup') {
       if (mode === 'register' && [...displayName.trim()].length > 80) {
         error = text('昵称不能超过 80 个字符。', 'Display name must not exceed 80 characters.');
         return;
@@ -91,6 +94,10 @@
         return;
       }
     }
+    if (mode === 'setup' && password !== passwordConfirm) {
+      error = text('两次输入的密码不一致。', 'Passwords do not match.');
+      return;
+    }
     busy = true;
     try {
       if (mode === 'reset') {
@@ -98,7 +105,9 @@
       } else if (mode === 'register') {
         await api.post('/auth/register', { email, password, display_name: displayName.trim() });
       } else {
-        const payload = mode === 'setup' ? { email, password, token: setupToken } : { email, password };
+        const payload = mode === 'setup'
+          ? { email, password, password_confirm: passwordConfirm, ...(options.setup_requires_token ? { token: setupToken } : {}) }
+          : { email, password };
         const result = await api.post<User>(`/auth/${mode}`, payload);
         window.location.assign(result.must_change_password ? '/web/auth/password' : '/web/dashboard');
         return;
@@ -184,14 +193,14 @@
           {#if mode === 'reset'}
             <p class="help">{text('我们会发送一封邮件，帮助你重新设置密码。', 'We’ll email you a link to reset your password.')}</p>
           {/if}
-          {#if step === 'password'}
+          {#if step === 'password' || mode === 'setup'}
             <div class="field">
               <div class="label-row">
                 <label for="auth-password">{text('密码', 'Password')}</label>
                 {#if mode === 'login' && options.recovery_enabled}<button type="button" class="text-button muted" onclick={() => changeMode('reset')} disabled={busy}>{text('重置密码', 'Reset password')}</button>{/if}
               </div>
               <div class="password-field">
-                <input id="auth-password" type={showPassword ? 'text' : 'password'} autocomplete={mode === 'login' ? 'current-password' : 'new-password'} bind:value={password} bind:this={passwordInput} disabled={busy} required placeholder={text(mode === 'login' ? '输入你的密码' : '设置一个安全的密码', mode === 'login' ? 'Your password' : 'Create a secure password')} aria-describedby={mode !== 'login' ? 'password-help' : undefined} />
+                <input id="auth-password" type={showPassword ? 'text' : 'password'} autocomplete={mode === 'login' ? 'current-password' : 'new-password'} bind:value={password} bind:this={passwordInput} disabled={busy || loading} required placeholder={text(mode === 'login' ? '输入你的密码' : '设置一个安全的密码', mode === 'login' ? 'Your password' : 'Create a secure password')} aria-describedby={mode !== 'login' ? 'password-help' : undefined} />
                 <button class="password-toggle" type="button" aria-label={showPassword ? text('隐藏密码', 'Hide password') : text('显示密码', 'Show password')} aria-pressed={showPassword} disabled={busy} onclick={() => showPassword = !showPassword}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>{#if !showPassword}<path d="m3 3 18 18"/>{/if}</svg>
                 </button>
@@ -200,6 +209,13 @@
             </div>
             {#if mode === 'setup'}
               <div class="field">
+                <label for="auth-password-confirm">{text('确认密码', 'Confirm password')}</label>
+                <input id="auth-password-confirm" type={showPassword ? 'text' : 'password'} autocomplete="new-password" bind:value={passwordConfirm} required disabled={busy || loading} />
+              </div>
+              <p class="help">{text('此账号将成为管理员，无需验证邮件。', 'This account becomes the administrator without email verification.')}</p>
+            {/if}
+            {#if mode === 'setup' && options.setup_requires_token}
+              <div class="field">
                 <label for="setup-token">{text('初始化密钥', 'Setup token')}</label>
                 <input id="setup-token" type="password" autocomplete="off" bind:value={setupToken} required disabled={busy} />
               </div>
@@ -207,7 +223,7 @@
           {/if}
           {#if error || oauthError}<p class="error" role="alert">{error || $t(oauthError)}</p>{/if}
           <button class="primary" type="submit" disabled={busy || loading}>
-            {loading ? text('正在加载…', 'Loading…') : busy ? text('请稍候…', 'Please wait…') : mode === 'reset' ? text('发送重置邮件', 'Send reset email') : step === 'details' ? text('使用邮箱继续', 'Continue with email') : mode === 'setup' ? text('创建管理员', 'Create administrator') : mode === 'register' ? text('继续', 'Continue') : text('登录', 'Sign in')}
+            {loading ? text('正在加载…', 'Loading…') : busy ? text('请稍候…', 'Please wait…') : mode === 'setup' ? text('创建管理员', 'Create administrator') : mode === 'reset' ? text('发送重置邮件', 'Send reset email') : step === 'details' ? text('使用邮箱继续', 'Continue with email') : mode === 'register' ? text('继续', 'Continue') : text('登录', 'Sign in')}
           </button>
         </form>
 
@@ -226,7 +242,7 @@
       {/if}
     </section>
 
-    {#if step !== 'sent' && (step === 'password' || mode === 'reset' || mode === 'setup')}
+    {#if step !== 'sent' && mode !== 'setup' && (step === 'password' || mode === 'reset')}
       <button class="back text-button muted" disabled={busy} onclick={() => mode === 'reset' || mode === 'setup' ? changeMode('login') : changeEmail()}><span aria-hidden="true">‹</span> {text('更改方式', 'Change method')}</button>
     {/if}
     {#if mode === 'login' && step === 'details' && !loading && !configError}

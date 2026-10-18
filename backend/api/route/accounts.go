@@ -2,6 +2,7 @@ package route
 
 import (
 	"crypto/subtle"
+	"errors"
 	"net/http"
 	"time"
 
@@ -37,18 +38,29 @@ func registerAccounts(api *gin.RouterGroup, cfg Config) {
 		common.OK(c, userservice.SafeUser(user))
 	}
 	auth.POST("/setup", func(c *gin.Context) {
-		var input accountservice.Input
+		var input struct {
+			accountservice.Input
+			PasswordConfirm string `json:"password_confirm"`
+		}
 		if c.ShouldBindJSON(&input) != nil {
 			respondError(c, 400, "invalid setup request")
 			return
 		}
-		if cfg.SetupToken == "" || subtle.ConstantTimeCompare([]byte(input.Token), []byte(cfg.SetupToken)) != 1 {
+		if !cfg.SelfHosted && (cfg.SetupToken == "" || subtle.ConstantTimeCompare([]byte(input.Token), []byte(cfg.SetupToken)) != 1) {
 			respondError(c, 403, "setup unavailable")
 			return
 		}
-		user, err := accounts.Create(c.Request.Context(), input, true, false)
+		if cfg.SelfHosted && (input.PasswordConfirm == "" || input.PasswordConfirm != input.Password) {
+			respondError(c, 400, "password confirmation must match")
+			return
+		}
+		user, err := accounts.Create(c.Request.Context(), input.Input, true, false)
 		if err != nil {
-			respondError(c, 403, err.Error())
+			status := http.StatusBadRequest
+			if errors.Is(err, accountservice.ErrAlreadyInitialized) {
+				status = http.StatusForbidden
+			}
+			respondError(c, status, err.Error())
 			return
 		}
 		login(c, user)

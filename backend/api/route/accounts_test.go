@@ -334,7 +334,7 @@ func TestAdminSetupAndUserCreationWithoutSMTP(t *testing.T) {
 	}
 	t.Cleanup(func() { _ = model.CloseDB() })
 	router := gin.New()
-	route.RegisterWithConfig(router, route.Config{SessionSecret: "test-secret", APIKeyEncryptionSecret: "test-secret", SetupToken: "operator-only-setup-token", SelfHosted: true})
+	route.RegisterWithConfig(router, route.Config{SessionSecret: "test-secret", APIKeyEncryptionSecret: "test-secret", SetupToken: "operator-only-setup-token"})
 	send := func(path, payload string, cookie *http.Cookie) *httptest.ResponseRecorder {
 		t.Helper()
 		req := httptest.NewRequest(http.MethodPost, path, bytes.NewBufferString(payload))
