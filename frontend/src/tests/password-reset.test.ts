@@ -44,6 +44,7 @@ it('keeps visibility controls independent and prevents submissions without a res
 it('submits the session password page without an old password and refreshes session', async () => {
   component = mount(PasswordPage, { target: document.body });
   await vi.waitFor(() => expect(document.querySelectorAll('input').length).toBe(2));
+  expect(document.querySelector('a.back')?.getAttribute('href')).toBe('/web/settings#security');
   fill('replacement-password'); submit();
   await vi.waitFor(() => expect(calls.post).toHaveBeenCalledWith('/auth/password', { password: 'replacement-password' }));
   await vi.waitFor(() => expect(calls.refresh).toHaveBeenCalled());

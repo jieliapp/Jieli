@@ -67,7 +67,7 @@
         </form>
       {/if}
     </div>
-    <a class="back" href={signedIn ? (done ? '/web/settings#security' : '/web/dashboard') : '/web/auth/signin'}>‹ {signedIn ? text('返回', 'Back') : text('返回登录', 'Back to sign in')}</a>
+    <a class="back" href={signedIn ? '/web/settings#security' : '/web/auth/signin'}>‹ {signedIn ? text('返回', 'Back') : text('返回登录', 'Back to sign in')}</a>
   </div>
 </div>
 <style>
