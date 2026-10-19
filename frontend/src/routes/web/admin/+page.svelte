@@ -213,7 +213,7 @@
             if (!smtp.public_base_url) smtp.registration_enabled = false;
             emailMessage = text('站点地址已保存。', 'Site address saved.');
           }); }}>
-            <p class="admin-hint">{text('用于邮件链接、附件和头像链接。请填写用户实际访问的地址。', 'Used for email, attachment, and avatar links. Enter the address users actually visit.')}</p>
+            <p class="admin-hint">{text('请填写本站实际访问的地址，用来设置插件的 JIELI_BASE_URL 变量。', 'Enter this site’s actual access URL to configure the plugin’s JIELI_BASE_URL variable.')}</p>
             <label for="public-base-url">{text('公开站点地址', 'Public site URL')}<input id="public-base-url" type="url" bind:value={smtp.public_base_url} placeholder="https://example.com" /></label>
             <div class="admin-actions"><Button type="submit" disabled={emailBusy}>{text('保存站点地址', 'Save site URL')}</Button></div>
           </form>
