@@ -37,3 +37,7 @@ The script builds and starts Jieli at [http://localhost:8080](http://localhost:8
 ## Sync conversations
 
 Install the [Jieli plugin](https://github.com/jieliapp/plugins) for your agent to sync conversations to your instance.
+
+## License
+
+This project is licensed under the [Apache License 2.0](LICENSE).

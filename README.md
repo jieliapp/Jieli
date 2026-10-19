@@ -37,3 +37,7 @@ cd Jieli
 ## 对话同步
 
 安装 Agent 对应的 [Jieli 插件](https://github.com/jieliapp/plugins)，将对话同步到自己的实例。
+
+## 许可证
+
+本项目采用 [Apache License 2.0](LICENSE)。
