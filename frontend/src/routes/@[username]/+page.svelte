@@ -26,7 +26,7 @@
 
   const username = $derived($page.params.username ?? '');
   const isOwnProfile = $derived(Boolean($session.user && profile?.user.username === $session.user.username));
-  const currentInitial = $derived((profile?.user.username || '?').charAt(0).toUpperCase());
+  const currentInitial = $derived((profile?.user.display_name || profile?.user.username || '?').charAt(0).toUpperCase());
 
   function formatProfileStat(value: number) {
     if (Math.abs(value) < 1000) return value.toString();

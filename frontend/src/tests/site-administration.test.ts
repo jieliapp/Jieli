@@ -4,17 +4,19 @@ import { mount, unmount } from '../../node_modules/svelte/src/index-client.js';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { writable } from 'svelte/store';
 import TopBar from '$lib/components/layout/TopBar.svelte';
+import ThreadCard from '$lib/components/thread/ThreadCard.svelte';
+import PublicProfile from '../routes/@[username]/+page.svelte';
 import Admin from '../routes/web/admin/+page.svelte';
 import { locale } from '$lib/stores/locale';
 import { session } from '$lib/stores/session';
-import type { User } from '$lib/api/types';
+import type { ThreadSummary, User } from '$lib/api/types';
 
 const api = vi.hoisted(() => ({ get: vi.fn(), post: vi.fn(), put: vi.fn() }));
 // @ts-expect-error client onMount
 vi.mock('svelte', async () => await import('../../node_modules/svelte/src/index-client.js'));
 vi.mock('$lib/api/client', async (original) => ({ ...await original<typeof import('$lib/api/client')>(), api }));
 vi.mock('$app/navigation', () => ({ goto: vi.fn() }));
-vi.mock('$app/stores', () => ({ page: writable({ url: new URL('http://localhost/web/admin') }) }));
+vi.mock('$app/stores', () => ({ page: writable({ url: new URL('http://localhost/web/admin'), params: { username: 'user7740788e' } }) }));
 
 let component: ReturnType<typeof mount> | undefined;
 let admin: boolean;
@@ -94,6 +96,33 @@ it.each([['en', 'Site Administration'], ['zh', '站点管理']] as const)('place
   expect(entry.parentElement?.classList.contains('menu-section')).toBe(true);
   entry.addEventListener('click', event => event.preventDefault());
   entry.click(); await vi.waitFor(() => expect(document.querySelector('[role="menu"]')).toBeNull());
+});
+
+it('keeps header and menu avatar initials aligned with the account display name', async () => {
+  session.set({ user: { username: 'user7740788e', display_name: 'buru' } as User, loaded: true, loading: false });
+  component = mount(TopBar, { target: document.body });
+  expect(document.querySelector('.account-trigger .avatar-fallback')?.textContent).toBe('B');
+  document.querySelector<HTMLButtonElement>('[aria-haspopup="menu"]')!.click();
+  await vi.waitFor(() => expect(document.querySelector('.menu-avatar')?.textContent).toBe('B'));
+  session.update(state => ({ ...state, user: { ...state.user!, display_name: '' } }));
+  await vi.waitFor(() => expect(document.querySelector('.account-trigger .avatar-fallback')?.textContent).toBe('U'));
+  expect(document.querySelector('.menu-avatar')?.textContent).toBe('U');
+});
+
+it.each([true, false])('uses the display name initial on the public profile (own profile: %s)', async (own) => {
+  session.set({ user: own ? { username: 'user7740788e' } as User : null, loaded: true, loading: false });
+  api.get.mockImplementation(async (path: string) => {
+    if (path.endsWith('/activity')) return [];
+    return { user: { username: 'user7740788e', display_name: 'buru' }, stats: { total_messages: 0, lines_added: 0, total_threads: 0, lines_removed: 0, files_changed: 0 } };
+  });
+  component = mount(PublicProfile, { target: document.body });
+  await vi.waitFor(() => expect(document.querySelector('.identity .avatar-fallback')?.textContent).toBe('B'));
+});
+
+it.each([['buru', 'B'], ['中文名称', '中'], ['', 'U']])('uses the account name initial on thread cards (%s)', (display_name, initial) => {
+  session.set({ user: { username: 'user7740788e', display_name } as User, loaded: true, loading: false });
+  component = mount(ThreadCard, { target: document.body, props: { thread: { provider: 'codex', provider_thread_id: 'T-test', title: 'Test', visibility: 'private', updated_at: '2026-10-21T00:00:00Z', message_count: 1 } as ThreadSummary } });
+  expect(document.querySelector('.card .avatar')?.textContent).toBe(initial);
 });
 
 it('ordinary users have no admin block or extra separator', async () => {

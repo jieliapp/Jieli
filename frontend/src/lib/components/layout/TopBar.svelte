@@ -78,7 +78,7 @@
             {#if $session.user.avatar_url}
               <img class="avatar" src={$session.user.avatar_url} alt={$session.user.username} />
             {:else}
-              <span class="avatar avatar-fallback">{$session.user.username.charAt(0).toUpperCase()}</span>
+              <span class="avatar avatar-fallback">{($session.user.display_name || $session.user.username).charAt(0).toUpperCase()}</span>
             {/if}
             <svg class="chevron" class:up={open} viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
               <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M4 6l4 4 4-4" />
@@ -91,7 +91,7 @@
                 {#if $session.user.avatar_url}
                   <img class="menu-avatar" src={$session.user.avatar_url} alt="" />
                 {:else}
-                  <span class="menu-avatar avatar-fallback">{$session.user.username.charAt(0).toUpperCase()}</span>
+                  <span class="menu-avatar avatar-fallback">{($session.user.display_name || $session.user.username).charAt(0).toUpperCase()}</span>
                 {/if}
                 <div class="account-meta">
                   <div class="account-name">{$session.user.display_name || $session.user.username}</div>

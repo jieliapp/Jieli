@@ -9,7 +9,7 @@
 
   const provider = $derived(providerMeta(thread.provider));
   const user = $derived($session.user);
-  const initial = $derived((user?.username || '?').charAt(0).toUpperCase());
+  const initial = $derived((user?.display_name || user?.username || '?').charAt(0).toUpperCase());
   const searchParts = $derived(search.trim().split(/\s+/).filter(Boolean));
 
   function formatFileURI(value: string): string {
