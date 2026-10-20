@@ -2,6 +2,12 @@
 
 [简体中文](README.md) · English
 
+[![Go CI](https://img.shields.io/github/actions/workflow/status/jieliapp/Jieli/go.yml?branch=main&style=flat-square&logo=github&label=Go%20CI)](https://github.com/jieliapp/Jieli/actions/workflows/go.yml)
+[![License](https://img.shields.io/github/license/jieliapp/Jieli?style=flat-square)](LICENSE)
+[![Go](https://img.shields.io/badge/Go-1.25%2B-00ADD8?style=flat-square&logo=go&logoColor=white)](https://go.dev/)
+[![Svelte](https://img.shields.io/badge/Svelte-5-FF3E00?style=flat-square&logo=svelte&logoColor=white)](https://svelte.dev/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+
 Jieli provides **cloud sync, backup, search and sharing for AI coding conversations**: sync local Claude Code and Codex sessions to your own server in real time, browse them across devices, search their full text and share them by link.
 
 Sync historical sessions and export conversations while keeping control of your data. Support for other agents is planned.

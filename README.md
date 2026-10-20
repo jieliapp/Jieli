@@ -2,6 +2,12 @@
 
 简体中文 · [English](README.en.md)
 
+[![Go CI](https://img.shields.io/github/actions/workflow/status/jieliapp/Jieli/go.yml?branch=main&style=flat-square&logo=github&label=Go%20CI)](https://github.com/jieliapp/Jieli/actions/workflows/go.yml)
+[![License](https://img.shields.io/github/license/jieliapp/Jieli?style=flat-square)](LICENSE)
+[![Go](https://img.shields.io/badge/Go-1.25%2B-00ADD8?style=flat-square&logo=go&logoColor=white)](https://go.dev/)
+[![Svelte](https://img.shields.io/badge/Svelte-5-FF3E00?style=flat-square&logo=svelte&logoColor=white)](https://svelte.dev/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+
 Jieli 为 AI 编程对话提供**云端同步、备份、搜索和分享**：将 Claude Code、Codex 的本地会话实时同步到自己的服务器，方便跨设备查看、全文搜索和链接分享。
 
 支持同步历史会话和导出对话，数据由你掌控；其他 Agent 待支持。
