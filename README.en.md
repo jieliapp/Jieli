@@ -36,7 +36,15 @@ The script builds and starts Jieli at [http://localhost:8080](http://localhost:8
 
 ## Sync conversations
 
-Install the [Jieli plugin](https://github.com/jieliapp/plugins) for your agent to sync conversations to your instance.
+Install the [Jieli plugin](https://github.com/jieliapp/plugins) for your agent to sync conversations to your instance in real time.
+
+To sync historical Claude Code and Codex sessions (requires Node.js 20+):
+
+```sh
+curl -fsSLo jieli-sync.mjs https://jieli.app/jieli-sync.mjs && node jieli-sync.mjs
+```
+
+The script uses your plugin configuration and prompts for missing settings. For self-hosting, set `JIELI_BASE_URL` or `base_url` in `~/.config/jieli/settings.json` to your instance URL.
 
 ## License
 

@@ -80,6 +80,15 @@
           ]
         },
         {
+          id: 'history-sync',
+          title: '同步历史会话',
+          body: [
+            { t: 'p', text: '使用 Node.js 20+，在终端运行以下命令，同步历史的 Claude Code、Codex 会话：' },
+            { t: 'code', code: 'curl -fsSLo jieli-sync.mjs https://jieli.app/jieli-sync.mjs && node jieli-sync.mjs' },
+            { t: 'p', text: '脚本沿用插件配置，缺少配置时会提示填写。自托管用户请将 JIELI_BASE_URL 或 ~/.config/jieli/settings.json 中的 base_url 设置为自己的站点地址。' }
+          ]
+        },
+        {
           id: 'browse',
           title: '浏览与搜索',
           body: [
@@ -232,6 +241,15 @@
               text: 'Then configure the API key: paste it into the chat for the agent to store, export it as an env var, or write it to ~/.config/jieli/settings.json.'
             },
             { t: 'code', code: 'export JIELI_API_KEY="<api-key-from-jieli.app>"' }
+          ]
+        },
+        {
+          id: 'history-sync',
+          title: 'Sync historical sessions',
+          body: [
+            { t: 'p', text: 'With Node.js 20+, run this command in your terminal to sync historical Claude Code and Codex sessions:' },
+            { t: 'code', code: 'curl -fsSLo jieli-sync.mjs https://jieli.app/jieli-sync.mjs && node jieli-sync.mjs' },
+            { t: 'p', text: 'The script uses your plugin configuration and prompts for missing settings. For self-hosting, set JIELI_BASE_URL or base_url in ~/.config/jieli/settings.json to your instance URL.' }
           ]
         },
         {

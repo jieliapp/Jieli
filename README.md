@@ -36,7 +36,15 @@ cd Jieli
 
 ## 对话同步
 
-安装 Agent 对应的 [Jieli 插件](https://github.com/jieliapp/plugins)，将对话同步到自己的实例。
+安装 Agent 对应的 [Jieli 插件](https://github.com/jieliapp/plugins)，将对话实时同步到自己的实例。
+
+同步历史的 Claude Code、Codex 会话（需 Node.js 20+）：
+
+```sh
+curl -fsSLo jieli-sync.mjs https://jieli.app/jieli-sync.mjs && node jieli-sync.mjs
+```
+
+脚本沿用插件配置，缺少配置时会提示填写。自托管用户请将 `JIELI_BASE_URL` 或 `~/.config/jieli/settings.json` 中的 `base_url` 设置为自己的站点地址。
 
 ## 许可证
 
