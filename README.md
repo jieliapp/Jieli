@@ -1,3 +1,5 @@
+感谢 [Linux.do 论坛](https://linux.do/) 的支持。
+
 # Jieli
 
 简体中文 · [English](README.en.md)
