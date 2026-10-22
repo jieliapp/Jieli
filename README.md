@@ -1,5 +1,3 @@
-感谢 [Linux.do 论坛](https://linux.do/) 的支持。
-
 # Jieli
 
 简体中文 · [English](README.en.md)
@@ -53,3 +51,7 @@ curl -fsSLo jieli-sync.mjs https://jieli.app/jieli-sync.mjs && node jieli-sync.m
 ## 许可证
 
 本项目采用 [Apache License 2.0](LICENSE)。
+
+## 友情链接
+
+[LINUX DO](https://linux.do/) —— 真诚分享、友好讨论的技术社区，本项目的交流与反馈也发布于此
